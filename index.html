@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYAS | Haute Pâtisserie & Boulangerie Moderne</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --cream: #fcfbf7;
+            --noir: #1a1a1a;
+            --gold: #af8a5b;
+            --clay: #6b5b4e;
+            --zomato: #e23744;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--cream); }
+        ::-webkit-scrollbar-thumb { background: var(--noir); border-radius: 10px; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--cream);
+            color: var(--noir);
+            overflow-x: hidden;
+        }
+
+        .serif-display { font-family: 'Bodoni Moda', serif; }
+        .serif-elegant { font-family: 'Cormorant+Garamond', serif; }
+
+        /* --- Animations & Transitions --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-reveal {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            overflow: hidden;
+        }
+        .text-reveal-inner {
+            display: block;
+            transform: translateY(110%);
+            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal.active .text-reveal-inner {
+            transform: translateY(0);
+        }
+
+        /* --- Layout Specials --- */
+        .glass-header {
+            background: rgba(252, 251, 247, 0.7);
+            backdrop-filter: saturate(180%) blur(20px);
+        }
+
+        .hero-image-zoom {
+            animation: slowZoom 20s infinite alternate;
+        }
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+
+        .product-card {
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .product-card:hover {
+            transform: translateY(-15px);
+        }
+        .product-card .price-badge {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .product-card:hover .price-badge {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Custom Cursor (Optional Modern Touch) --- */
+        #cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        /* --- Accordion --- */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 300px;
+        }
+        .accordion-item.active .icon-plus {
+            transform: rotate(45deg);
+        }
+
+        /* --- Shake Section Background --- */
+        .shake-gradient {
+            background: radial-gradient(circle at center, #2a2a2a 0%, #000 100%);
+        }
+
+        /* --- Floating Elements --- */
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div id="cursor" class="hidden lg:block"></div>
+
+    <!-- Announcement Bar -->
+    <div class="bg-stone-950 text-white py-2.5 text-[10px] uppercase tracking-[0.4em] text-center font-bold relative z-[70]">
+        <div class="marquee-container">
+            <div class="marquee-content">
+                Maison Vyas: Redefining the Indian Patisserie Landscape • Freshly Baked Every Hour • Shipping Pan-India for Dry Cakes • Visit our Flagship GK-1 Atelier • Order via Zomato for Instant Cravings • 
+                Maison Vyas: Redefining the Indian Patisserie Landscape • Freshly Baked Every Hour • Shipping Pan-India for Dry Cakes • Visit our Flagship GK-1 Atelier • Order via Zomato for Instant Cravings • 
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-[34px] w-full z-[60] glass-header border-b border-stone-200 transition-all duration-500" id="main-nav">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16 flex items-center justify-between h-24">
+            
+            <!-- Menu Trigger (Left) -->
+            <div class="hidden lg:flex items-center space-x-10 text-[11px] font-extrabold uppercase tracking-[0.3em]">
+                <a href="#atelier" class="hover:text-amber-700 transition-all">Atelier</a>
+                <a href="#collections" class="hover:text-amber-700 transition-all">Collections</a>
+                <a href="#custom" class="hover:text-amber-700 transition-all">Bespoke</a>
+            </div>
+
+            <!-- Logo (Center) -->
+            <div class="flex flex-col items-center">
+                <a href="#" class="text-3xl lg:text-4xl serif-display font-black tracking-[-0.05em] text-stone-900 leading-none">
+                    VYAS<span class="text-amber-600">.</span>
+                </a>
+                <span class="text-[8px] tracking-[0.6em] font-bold uppercase mt-1 text-stone-400">Haute Patisserie</span>
+            </div>
+
+            <!-- CTA (Right) -->
+            <div class="flex items-center space-x-8">
+                <div class="hidden md:flex flex-col items-end text-[10px] font-bold uppercase tracking-widest leading-none">
+                    <span class="text-stone-400 mb-1">Open Until</span>
+                    <span class="text-stone-900">11:00 PM IST</span>
+                </div>
+                <button class="bg-stone-950 text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-amber-700 transition-all shadow-2xl active:scale-95">
+                    Order Online
+                </button>
+                <button class="lg:hidden text-stone-900" id="mobile-menu-toggle">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="relative h-screen min-h-[800px] flex items-center overflow-hidden">
+        <div class="absolute inset-0 bg-stone-200">
+            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover hero-image-zoom brightness-90" alt="Bakery Hero">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-stone-950/60 via-transparent to-transparent"></div>
+        
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16 relative z-10 text-white w-full">
+            <div class="max-w-4xl">
+                <span class="reveal inline-block cursive text-3xl text-amber-400 mb-6 active">Tradition Meets Modernity</span>
+                <h1 class="reveal text-7xl lg:text-[160px] serif-display font-black leading-[0.8] tracking-tighter active delay-100">
+                    BAKED <br>
+                    <span class="italic font-light serif-elegant">Poetry</span>
+                </h1>
+                <div class="reveal mt-12 flex flex-col md:flex-row md:items-center gap-8 active delay-300">
+                    <p class="text-lg lg:text-xl font-medium max-w-md text-stone-200 leading-relaxed border-l-2 border-amber-500 pl-6">
+                        Delhi's most refined bakery atelier. Crafting artisanal breads, celestial cakes, and couture pastries since 1998.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#collections" class="w-20 h-20 rounded-full border border-white flex items-center justify-center hover:bg-white hover:text-stone-900 transition-all duration-500 group">
+                            <i data-lucide="arrow-down" class="group-hover:translate-y-2 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-white opacity-50">
+            <span class="text-[9px] uppercase tracking-[0.5em] font-bold">Scroll to Explore</span>
+            <div class="w-[1px] h-20 bg-gradient-to-b from-white to-transparent"></div>
+        </div>
+    </header>
+
+    <!-- The Atelier Philosophy -->
+    <section id="atelier" class="py-32 lg:py-48 overflow-hidden">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16">
+            <div class="grid lg:grid-cols-12 gap-16 items-center">
+                
+                <div class="lg:col-span-5 reveal">
+                    <span class="text-amber-700 font-black uppercase tracking-[0.4em] text-[10px] mb-8 block">01 / The Atelier</span>
+                    <h2 class="text-5xl lg:text-7xl serif-display font-black mb-10 leading-[1.1]">
+                        Where <span class="italic text-amber-700">Flour</span> Becomes <span class="serif-elegant font-light">Ethereal.</span>
+                    </h2>
+                    <p class="text-stone-500 text-lg leading-loose mb-12">
+                        At Maison Vyas, we don't just bake; we architect flavor. Every morning, our chefs engage in a silent dance with temperature, humidity, and the finest levain. We believe a croissant should sing with shatter-crisp layers, and a cake should tell a story of heritage and luxury.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-12">
+                        <div>
+                            <h4 class="text-3xl font-black mb-2 serif-display">24h+</h4>
+                            <p class="text-[10px] uppercase font-black tracking-widest text-stone-400">Fermentation Process</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-black mb-2 serif-display">82%</h4>
+                            <p class="text-[10px] uppercase font-black tracking-widest text-stone-400">Fat French Butter</p>
+                        </div>
+                    </div>
+
+                    <button class="mt-16 group flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.3em]">
+                        <span class="pb-1 border-b-2 border-stone-900 group-hover:border-amber-600 group-hover:text-amber-600 transition-all">Learn about our sourcing</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="lg:col-span-7 relative">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-8 reveal delay-100">
+                            <div class="rounded-[2rem] overflow-hidden aspect-[4/5] shadow-2xl">
+                                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" alt="Baker Hands">
+                            </div>
+                        </div>
+                        <div class="col-span-4 self-end reveal delay-300">
+                            <div class="rounded-[2rem] overflow-hidden aspect-square shadow-xl mb-4">
+                                <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Muffins">
+                            </div>
+                            <div class="bg-amber-100 p-8 rounded-[2rem] text-center">
+                                <div class="text-amber-800 font-black text-xs uppercase tracking-widest mb-2">Since</div>
+                                <div class="text-4xl font-black serif-display text-amber-900">1998</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative Badge -->
+                    <div class="absolute -top-12 -right-12 floating hidden lg:block">
+                        <svg class="w-40 h-40" viewBox="0 0 200 200">
+                            <path id="circlePath" d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0" fill="transparent"/>
+                            <text class="uppercase text-[12px] font-black tracking-[0.4em] fill-stone-900">
+                                <textPath href="#circlePath">Atelier Maison Vyas • Authentic • Delhi • </textPath>
+                            </text>
+                        </svg>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Category Filter Bar (Fixed on Scroll Trigger) -->
+    <section class="py-12 border-y border-stone-200 sticky top-[130px] z-40 glass-header">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16 flex items-center justify-between overflow-x-auto no-scrollbar gap-12">
+            <button class="category-btn active text-[11px] font-black uppercase tracking-[0.3em] flex items-center gap-3 whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full bg-amber-600"></span> All Collections
+            </button>
+            <button class="category-btn text-stone-400 hover:text-stone-900 transition-all text-[11px] font-black uppercase tracking-[0.3em] whitespace-nowrap">Signatures</button>
+            <button class="category-btn text-stone-400 hover:text-stone-900 transition-all text-[11px] font-black uppercase tracking-[0.3em] whitespace-nowrap">Boulangerie</button>
+            <button class="category-btn text-stone-400 hover:text-stone-900 transition-all text-[11px] font-black uppercase tracking-[0.3em] whitespace-nowrap">The Shake Bar</button>
+            <button class="category-btn text-stone-400 hover:text-stone-900 transition-all text-[11px] font-black uppercase tracking-[0.3em] whitespace-nowrap">Savory Atelier</button>
+            <button class="category-btn text-stone-400 hover:text-stone-900 transition-all text-[11px] font-black uppercase tracking-[0.3em] whitespace-nowrap">Celebration</button>
+        </div>
+    </section>
+
+    <!-- Main Collections -->
+    <section id="collections" class="py-32 bg-stone-50">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16">
+            
+            <!-- Category Header: Cakes -->
+            <div class="mb-20 reveal">
+                <h3 class="text-4xl serif-display font-black mb-4">Maison Signatures</h3>
+                <p class="text-stone-400 text-sm font-semibold uppercase tracking-widest">Selected Haute Patisserie Items</p>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24 mb-32">
+                
+                <!-- Item 1: Royal Belgian -->
+                <div class="product-card group reveal">
+                    <div class="relative overflow-hidden rounded-[2.5rem] shadow-xl aspect-square mb-10">
+                        <img src="74421_belgium-chocolate-truffle-cake.jpeg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Royal Truffle">
+                        <div class="absolute top-6 right-6 bg-white px-6 py-2 rounded-full text-xs font-black shadow-lg price-badge">
+                            ₹2,450
+                        </div>
+                        <!-- Quick Add -->
+                        <button class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest translate-y-20 group-hover:translate-y-0 transition-all duration-500 hover:bg-stone-900 hover:text-white">
+                            Reserve this Creation
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-2xl serif-display font-black">Royal Belgian Truffle</h4>
+                        <span class="bg-amber-50 text-amber-800 text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-amber-200">Legacy</span>
+                    </div>
+                    <p class="text-stone-500 text-sm leading-relaxed mb-6">70% dark chocolate ganache, moist velvet sponge, dusted with 24k gold leaf flakes.</p>
+                </div>
+
+                <!-- Item 2: Strawberry Gold -->
+                <div class="product-card group reveal delay-100">
+                    <div class="relative overflow-hidden rounded-[2.5rem] shadow-xl aspect-square mb-10">
+                        <img src="https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Berry Cake">
+                        <div class="absolute top-6 right-6 bg-white px-6 py-2 rounded-full text-xs font-black shadow-lg price-badge">
+                            ₹2,100
+                        </div>
+                        <button class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest translate-y-20 group-hover:translate-y-0 transition-all duration-500 hover:bg-stone-900 hover:text-white">
+                            Reserve this Creation
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-2xl serif-display font-black">Wild Berry Chantilly</h4>
+                        <span class="bg-rose-50 text-rose-800 text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-rose-200">Seasonal</span>
+                    </div>
+                    <p class="text-stone-500 text-sm leading-relaxed mb-6">Organic strawberries, light-as-air vanilla bean cream, and Madagascan sponge.</p>
+                </div>
+
+                <!-- Item 3: Pistachio Rose -->
+                <div class="product-card group reveal delay-200">
+                    <div class="relative overflow-hidden rounded-[2.5rem] shadow-xl aspect-square mb-10">
+                        <img src="978df481003ec86b08a63da97ae393c2.jpg" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="Pistachio">
+                        <div class="absolute top-6 right-6 bg-white px-6 py-2 rounded-full text-xs font-black shadow-lg price-badge">
+                            ₹2,800
+                        </div>
+                        <button class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest translate-y-20 group-hover:translate-y-0 transition-all duration-500 hover:bg-stone-900 hover:text-white">
+                            Reserve this Creation
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <h4 class="text-2xl serif-display font-black">Persian Pistachio Rose</h4>
+                        <span class="bg-stone-50 text-stone-800 text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full border border-stone-200">Premium</span>
+                    </div>
+                    <p class="text-stone-500 text-sm leading-relaxed mb-6">Hand-ground Iranian pistachios with a hint of organic Damask rose water.</p>
+                </div>
+
+            </div>
+
+            <!-- Shake Bar (Dark Mode Sub-Section) -->
+            <div id="shakes" class="shake-gradient rounded-[4rem] p-12 lg:p-24 text-white reveal overflow-hidden relative mb-32">
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-amber-600/20 blur-[100px] rounded-full"></div>
+                
+                <div class="grid lg:grid-cols-2 gap-20 items-center relative z-10">
+                    <div>
+                        <span class="text-amber-500 font-bold uppercase tracking-[0.4em] text-[10px] mb-8 block">The Liquid Atelier</span>
+                        <h2 class="text-6xl lg:text-8xl serif-display font-black mb-10 leading-none italic">Thick <br> <span class="serif-elegant font-light text-stone-400">Alchemy.</span></h2>
+                        <p class="text-stone-400 text-lg leading-relaxed mb-12">No syrups. No powders. Just slow-churned gelato, premium dairy, and the same artisanal approach we take to our cakes.</p>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-center justify-between border-b border-white/10 pb-6 group cursor-pointer">
+                                <div>
+                                    <h4 class="text-2xl font-bold group-hover:text-amber-500 transition-all">Lotus Biscoff Crunch</h4>
+                                    <p class="text-stone-500 text-xs mt-1">Authentic cookie butter, crushed biscuits.</p>
+                                </div>
+                                <div class="text-2xl font-black serif-display">₹450</div>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-white/10 pb-6 group cursor-pointer">
+                                <div>
+                                    <h4 class="text-2xl font-bold group-hover:text-amber-500 transition-all">Belgian Dark Noir</h4>
+                                    <p class="text-stone-500 text-xs mt-1">70% melted couverture chocolate.</p>
+                                </div>
+                                <div class="text-2xl font-black serif-display">₹520</div>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-white/10 pb-6 group cursor-pointer">
+                                <div>
+                                    <h4 class="text-2xl font-bold group-hover:text-amber-500 transition-all">Nutella Sea Salt</h4>
+                                    <p class="text-stone-500 text-xs mt-1">Hazelnut luxury with a savory twist.</p>
+                                </div>
+                                <div class="text-2xl font-black serif-display">₹480</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group">
+                        <img src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=800" class="w-full h-[700px] object-cover rounded-[3rem] shadow-2xl group-hover:scale-[1.02] transition-transform duration-700" alt="Shake">
+                        <div class="absolute inset-0 bg-stone-900/40 rounded-[3rem]"></div>
+                        <div class="absolute bottom-12 left-12 right-12 text-center">
+                            <button class="bg-white text-stone-900 w-full py-6 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-amber-600 hover:text-white transition-all">Order Chilled Delivery</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boulangerie Section -->
+            <div id="breads" class="mb-32">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal">
+                    <div class="max-w-xl">
+                        <h3 class="text-5xl serif-display font-black mb-6 italic underline decoration-amber-600 decoration-4 underline-offset-8">La Boulangerie</h3>
+                        <p class="text-stone-400 text-lg">Daily rituals in sourdough and butter. Fermented for 48 hours for the soul.</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Bread 1 -->
+                    <div class="reveal product-card bg-white p-6 rounded-[2.5rem] border border-stone-100 group">
+                        <div class="overflow-hidden rounded-2xl aspect-square mb-6">
+                            <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt="Bread">
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h5 class="text-xl font-black">Parisian Croissant</h5>
+                            <span class="text-amber-700 font-bold">₹180</span>
+                        </div>
+                        <p class="text-stone-400 text-xs leading-relaxed mb-6">Made with AOP Charentes-Poitou butter. 32 precise layers.</p>
+                        <button class="w-full py-3 bg-stone-100 rounded-xl text-[10px] font-black uppercase tracking-widest group-hover:bg-stone-900 group-hover:text-white transition-all">Add to Bag</button>
+                    </div>
+                    <!-- Bread 2 -->
+                    <div class="reveal product-card bg-white p-6 rounded-[2.5rem] border border-stone-100 group delay-100">
+                        <div class="overflow-hidden rounded-2xl aspect-square mb-6">
+                            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt="Bread">
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h5 class="text-xl font-black">Heritage Sourdough</h5>
+                            <span class="text-amber-700 font-bold">₹350</span>
+                        </div>
+                        <p class="text-stone-400 text-xs leading-relaxed mb-6">Naturally leavened for 48 hours. Open crumb and charred crust.</p>
+                        <button class="w-full py-3 bg-stone-100 rounded-xl text-[10px] font-black uppercase tracking-widest group-hover:bg-stone-900 group-hover:text-white transition-all">Add to Bag</button>
+                    </div>
+                    <!-- Bread 3 -->
+                    <div class="reveal product-card bg-white p-6 rounded-[2.5rem] border border-stone-100 group delay-200">
+                        <div class="overflow-hidden rounded-2xl aspect-square mb-6">
+                            <img src="https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt="Bread">
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h5 class="text-xl font-black">Pain au Chocolat</h5>
+                            <span class="text-amber-700 font-bold">₹220</span>
+                        </div>
+                        <p class="text-stone-400 text-xs leading-relaxed mb-6">Flaky pastry with two bars of Valrhona dark chocolate.</p>
+                        <button class="w-full py-3 bg-stone-100 rounded-xl text-[10px] font-black uppercase tracking-widest group-hover:bg-stone-900 group-hover:text-white transition-all">Add to Bag</button>
+                    </div>
+                    <!-- Bread 4 -->
+                    <div class="reveal product-card bg-white p-6 rounded-[2.5rem] border border-stone-100 group delay-300">
+                        <div class="overflow-hidden rounded-2xl aspect-square mb-6">
+                            <img src="https://images.unsplash.com/photo-1620921653138-f7fc20658e60?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" alt="Bread">
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h5 class="text-xl font-black">Garden Focaccia</h5>
+                            <span class="text-amber-700 font-bold">₹280</span>
+                        </div>
+                        <p class="text-stone-400 text-xs leading-relaxed mb-6">Cold pressed olive oil, sea salt, and fresh garden herbs.</p>
+                        <button class="w-full py-3 bg-stone-100 rounded-xl text-[10px] font-black uppercase tracking-widest group-hover:bg-stone-900 group-hover:text-white transition-all">Add to Bag</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Custom Bespoke Cakes Journey -->
+    <section id="custom" class="py-32 bg-stone-950 text-white overflow-hidden">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16">
+            <div class="grid lg:grid-cols-2 gap-24 items-center">
+                <div class="reveal">
+                    <span class="text-amber-500 font-black uppercase tracking-[0.4em] text-[10px] mb-8 block">Tailor-Made</span>
+                    <h2 class="text-6xl lg:text-8xl serif-display font-black mb-12 italic leading-none">Bespoke <br> <span class="text-stone-500 font-light serif-elegant">Sculptures.</span></h2>
+                    <p class="text-stone-400 text-xl leading-relaxed mb-16">For life’s grandest milestones, we create edible monuments. From 5-tier wedding architectures to minimalist birthday expressions.</p>
+                    
+                    <div class="space-y-12">
+                        <div class="flex items-start gap-8 reveal">
+                            <div class="w-12 h-12 rounded-full border border-amber-500 flex items-center justify-center shrink-0 font-black text-amber-500">01</div>
+                            <div>
+                                <h4 class="text-2xl font-bold mb-2">The Consultation</h4>
+                                <p class="text-stone-500">Meet our head pastry architect to discuss themes, flavors, and structural aesthetics.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-8 reveal delay-100">
+                            <div class="w-12 h-12 rounded-full border border-amber-500 flex items-center justify-center shrink-0 font-black text-amber-500">02</div>
+                            <div>
+                                <h4 class="text-2xl font-bold mb-2">Flavour Profile Tasting</h4>
+                                <p class="text-stone-500">A curated experience where you sample our seasonal fillings and sponge textures.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-8 reveal delay-200">
+                            <div class="w-12 h-12 rounded-full border border-amber-500 flex items-center justify-center shrink-0 font-black text-amber-500">03</div>
+                            <div>
+                                <h4 class="text-2xl font-bold mb-2">The Handcrafting</h4>
+                                <p class="text-stone-500">Our artisans spend up to 72 hours hand-modeling every petal and ornament.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="mt-20 bg-amber-600 text-white px-12 py-6 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-stone-900 transition-all shadow-2xl">
+                        Book Your Atelier Consultation
+                    </button>
+                </div>
+
+                <div class="relative reveal delay-300">
+                    <div class="rounded-[4rem] overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&q=80&w=1000" class="w-full h-[850px] object-cover" alt="Custom Cake">
+                    </div>
+                    <!-- Float Tag -->
+                    <div class="absolute -top-10 -left-10 bg-white p-12 rounded-[3rem] shadow-2xl text-stone-900 max-w-[240px]">
+                        <p class="cursive text-3xl text-amber-600 mb-4">Magnifique!</p>
+                        <p class="text-sm font-medium leading-relaxed">"Their attention to structural detail is unparalleled in Delhi."</p>
+                        <div class="mt-4 flex gap-1 text-amber-500">
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Zomato Delivery Experience -->
+    <section id="order" class="py-32 bg-white">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16">
+            <div class="bg-gradient-to-br from-[#e23744] to-[#b91c1c] rounded-[5rem] p-12 lg:p-24 text-white overflow-hidden relative shadow-inner">
+                
+                <div class="absolute inset-0 opacity-10 pointer-events-none">
+                    <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_30%,_#fff_0%,_transparent_100%)]"></div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-16 relative z-10">
+                    <div class="max-w-2xl text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 bg-white/20 px-6 py-2 rounded-full mb-8 backdrop-blur-md">
+                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em]">Priority Delivery Active</span>
+                        </div>
+                        <h2 class="text-5xl lg:text-7xl font-black mb-10 leading-none">Instant <br> <span class="italic font-light">Cravings</span> Solved.</h2>
+                        <p class="text-xl text-white/80 mb-12 leading-relaxed">Experience the Maison Vyas luxury at home. We've optimized our packaging for speed, ensuring your delicate cakes and chilled shakes arrive in atelier condition.</p>
+                        
+                        <div class="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start">
+                            <button class="bg-white text-[#e23744] px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl hover:scale-105 transition-transform flex items-center gap-4 justify-center">
+                                Order on Zomato <i data-lucide="external-link"></i>
+                            </button>
+                            <button class="bg-transparent border-2 border-white/40 hover:border-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all justify-center">
+                                Browse Menu
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full lg:w-96 flex justify-center">
+                        <div class="w-72 h-72 lg:w-96 lg:h-96 bg-white rounded-full flex flex-col items-center justify-center p-12 shadow-2xl border-[15px] border-white/20">
+                            <span class="text-[#e23744] text-[120px] lg:text-[180px] font-black italic underline tracking-tighter leading-none mb-4">z</span>
+                            <div class="text-[#e23744] font-black text-center text-xs tracking-widest">OFFICIAL PARTNER</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ & Service Section -->
+    <section class="py-32 bg-stone-50">
+        <div class="max-w-4xl mx-auto px-8 lg:px-16">
+            <div class="text-center mb-24 reveal">
+                <span class="text-amber-700 font-black uppercase tracking-[0.4em] text-[10px] mb-8 block">Concierge</span>
+                <h2 class="text-5xl serif-display font-black italic">Service Excellence</h2>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Accordion Item 1 -->
+                <div class="accordion-item bg-white rounded-3xl border border-stone-200 overflow-hidden reveal">
+                    <button class="w-full p-8 text-left flex justify-between items-center accordion-trigger">
+                        <span class="text-xl font-bold">Do you deliver eggless cakes?</span>
+                        <i data-lucide="plus" class="icon-plus transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content px-8 pb-8 text-stone-500 leading-relaxed">
+                        Yes, 90% of our collection is available in eggless variants. We use a proprietary recipe that ensures the same structural integrity and moist crumb as our traditional cakes.
+                    </div>
+                </div>
+                <!-- Accordion Item 2 -->
+                <div class="accordion-item bg-white rounded-3xl border border-stone-200 overflow-hidden reveal delay-100">
+                    <button class="w-full p-8 text-left flex justify-between items-center accordion-trigger">
+                        <span class="text-xl font-bold">How far in advance should I book?</span>
+                        <i data-lucide="plus" class="icon-plus transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content px-8 pb-8 text-stone-500 leading-relaxed">
+                        For signature cakes, 24 hours is ideal. For bespoke wedding architectures, we recommend a lead time of 15 to 30 days to ensure perfection in sourcing and craftsmanship.
+                    </div>
+                </div>
+                <!-- Accordion Item 3 -->
+                <div class="accordion-item bg-white rounded-3xl border border-stone-200 overflow-hidden reveal delay-200">
+                    <button class="w-full p-8 text-left flex justify-between items-center accordion-trigger">
+                        <span class="text-xl font-bold">Do you have bulk corporate gifting?</span>
+                        <i data-lucide="plus" class="icon-plus transition-transform duration-300"></i>
+                    </button>
+                    <div class="accordion-content px-8 pb-8 text-stone-500 leading-relaxed">
+                        Indeed. We have an "Atelier Corporate" program that offers custom-branded packaging and curated hamper selections for high-value client gifting.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter: The Journal -->
+    <section class="py-32 border-t border-stone-200 bg-white">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16 text-center">
+            <div class="max-w-2xl mx-auto reveal">
+                <i data-lucide="mail" class="w-12 h-12 mx-auto mb-10 text-amber-600"></i>
+                <h2 class="text-4xl lg:text-6xl serif-display font-black mb-8 italic">The Atelier Journal</h2>
+                <p class="text-stone-400 text-lg mb-12">Join our inner circle for secret Sunday recipes, priority access to seasonal drops, and invitations to our in-shop tasting events.</p>
+                
+                <form class="relative group">
+                    <input type="email" placeholder="Your Boutique Email" class="w-full bg-stone-50 border-none rounded-[2rem] py-8 px-10 text-stone-900 focus:ring-2 focus:ring-amber-600 outline-none text-center font-bold tracking-widest text-sm uppercase">
+                    <button class="mt-8 bg-stone-900 text-white px-16 py-6 rounded-full font-black text-xs uppercase tracking-widest hover:bg-amber-700 transition-all shadow-xl active:scale-95">
+                        Subscribe to Journal
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-950 text-stone-500 py-32">
+        <div class="max-w-screen-2xl mx-auto px-8 lg:px-16">
+            <div class="grid lg:grid-cols-4 gap-24 mb-32">
+                
+                <div class="lg:col-span-2">
+                    <div class="text-5xl font-black text-white serif-display mb-10 tracking-tighter">VYAS<span class="text-amber-600">.</span></div>
+                    <p class="text-xl leading-relaxed max-w-sm mb-12 text-stone-400 italic">"There is no love more sincere than the love of a perfectly baked sourdough."</p>
+                    <div class="flex gap-6">
+                        <a href="#" class="w-12 h-12 rounded-full border border-stone-800 flex items-center justify-center hover:bg-white hover:text-stone-950 transition-all"><i data-lucide="instagram"></i></a>
+                        <a href="#" class="w-12 h-12 rounded-full border border-stone-800 flex items-center justify-center hover:bg-white hover:text-stone-950 transition-all"><i data-lucide="twitter"></i></a>
+                        <a href="#" class="w-12 h-12 rounded-full border border-stone-800 flex items-center justify-center hover:bg-white hover:text-stone-950 transition-all"><i data-lucide="facebook"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h5 class="text-white font-black uppercase tracking-[0.4em] text-[10px] mb-10">Maison Guide</h5>
+                    <ul class="space-y-6 text-sm font-bold uppercase tracking-widest">
+                        <li><a href="#" class="hover:text-amber-500 transition-all">Shop Online</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-all">Cake Sculptures</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-all">Bulk Ordering</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-all">Atelier Stories</a></li>
+                        <li><a href="#" class="hover:text-amber-500 transition-all">Careers</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-white font-black uppercase tracking-[0.4em] text-[10px] mb-10">Visit atelier</h5>
+                    <div class="space-y-8">
+                        <div>
+                            <p class="text-white font-bold mb-2">Flagship GK-1</p>
+                            <p class="text-xs">M-Block Market, GK-1, <br> New Delhi, 110048</p>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold mb-2">Concierge</p>
+                            <p class="text-xs">+91 987 654 3210</p>
+                            <p class="text-xs">boutique@vyas.bakery</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Legals -->
+            <div class="pt-12 border-t border-stone-900 flex flex-col md:flex-row justify-between items-center gap-8">
+                <p class="text-[9px] font-black uppercase tracking-[0.4em]">&copy; 2024 Maison Vyas Pvt Ltd. Crafted with soul.</p>
+                <div class="flex gap-10 text-[9px] font-black uppercase tracking-[0.4em]">
+                    <a href="#" class="hover:text-white">Privacy</a>
+                    <a href="#" class="hover:text-white">Terms</a>
+                    <a href="#" class="hover:text-white">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // --- Init Lucide ---
+        lucide.createIcons();
+
+        // --- Cursor Logic ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // --- Reveal Scroll Logic ---
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // --- Navbar State on Scroll ---
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('h-20');
+                nav.classList.remove('h-24');
+                nav.classList.add('shadow-xl');
+            } else {
+                nav.classList.remove('h-20');
+                nav.classList.add('h-24');
+                nav.classList.remove('shadow-xl');
+            }
+        });
+
+        // --- Accordion Logic ---
+        document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const parent = trigger.parentElement;
+                parent.classList.toggle('active');
+                
+                // Close others
+                document.querySelectorAll('.accordion-item').forEach(item => {
+                    if (item !== parent) item.classList.remove('active');
+                });
+            });
+        });
+
+        // --- Smooth Category Switching Simulation ---
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('active', 'text-stone-900');
+                    b.classList.add('text-stone-400');
+                });
+                btn.classList.add('active', 'text-stone-900');
+            });
+        });
+
+    </script>
+
+</body>
+</html>
